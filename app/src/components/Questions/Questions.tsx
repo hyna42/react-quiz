@@ -1,24 +1,26 @@
+import type { AnswerObjetct } from "../../App";
+
 type Props = {
     questiton: string;
     answers: string[];
-    callback: () => void;
-    userAnswers: undefined;
+    callback: (e:React.MouseEvent<HTMLButtonElement>) => void;
+    userAnswers: AnswerObjetct | undefined;
     questitonNr: number;
-    totalQuestions: number
+    totalQuestions: number;
 }
 
 const QuestionsCard = ({ questiton, answers, callback, userAnswers, totalQuestions, questitonNr }: Props) => {
     return (
-        <div className="number">
+        <div className="number" >
             <p>
                 Question: {questitonNr} / {totalQuestions}
             </p>
             <p dangerouslySetInnerHTML={{ __html: questiton }} />
             <div>
-                {answers.map(answer => (
-                    <div>
-                        <button disabled={userAnswers} onClick={callback}>
-                            <span dangerouslySetInnerHTML={{__html: answer}}></span>
+                {answers.map((answer,index) => (
+                    <div key={index}>
+                        <button disabled={userAnswers ? true : false} onClick={callback} value={answer}>
+                            <span dangerouslySetInnerHTML={{ __html: answer }}></span>
                         </button>
                     </div>
                 ))}

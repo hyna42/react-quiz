@@ -1,5 +1,3 @@
-// import { shuffleArray } from "./utils"
-
 import { shuffleArray } from "./utils"
 
 // fetching datas from API
@@ -40,6 +38,7 @@ export const fetchQuizQuestions = async (
             }
         ))
 
+        console.log(":::",questions)
         return questions
 
     }
