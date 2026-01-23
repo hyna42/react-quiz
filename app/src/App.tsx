@@ -1,34 +1,68 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react"
+import { Difficulty, fetchQuizQuestions, type QuestionState } from "./API";
+// import QuestionsCard from "./components/Questions/Questions"
+
+
+const TOTAL_QUESTIONS = 10;
+
+type AnswerObjetct = {
+  question: string,
+  answer: string,
+  correct: boolean,
+  correctAnswer: string
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const [questions, setQuestions] = useState<QuestionState[]>([])
+  const [number, setNumber] = useState(0)
+  const [userAnwsers, setUserAnswers] = useState<AnswerObjetct[]>([])
+  const [score, setScore] = useState(0)
+  const [gameOver, setGameOver] = useState(true)
 
+  const startTrivial = async () => {
+    return
+  }
+
+
+  const checkAnswer: React.MouseEvent<HTMLButtonElement> = (e) => {
+    return
+  }
+
+  const nextQuestion = () => {
+    return
+  }
+
+  // useEffect(() => {
+  //   const data = fetchQuizQuestions(10, Difficulty.EASY)
+  //   console.log("TEST:::", fetchQuizQuestions(10, Difficulty.EASY))
+  // }, [])
+
+  console.log("TEST:::", fetchQuizQuestions(TOTAL_QUESTIONS, Difficulty.EASY))
+
+
+  // console.log(startTrivial)
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="App">
+      <h1>REACT QUIZ</h1>
+      <button className="start" onClick={startTrivial}>
+        Start
+      </button>
+      <p className="Score">Score :</p>
+      <p>Loading Questions ...</p>
+      {/* <QuestionsCard
+        questitonNr={number + 1}
+        totalQuestions={TOTAL_QUESTIONS}
+        questiton={questions[number].question}
+        answers={questions[number].answers}
+        userAnswers={userAnwsers ? userAnwsers[number] : undefined}
+        callback={checkAnswer}
+
+      /> */}
+      <button className="next" onClick={nextQuestion}>
+        Next Question
+      </button>
+    </div>
   )
 }
 
