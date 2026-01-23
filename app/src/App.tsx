@@ -1,11 +1,11 @@
 import { useState } from "react"
 import { Difficulty, fetchQuizQuestions, type QuestionState } from "./API";
-// import QuestionsCard from "./components/Questions/Questions"
+import QuestionsCard from "./components/Questions/Questions"
 
 
 const TOTAL_QUESTIONS = 10;
 
-type AnswerObjetct = {
+export type AnswerObjetct = {
   question: string,
   answer: string,
   correct: boolean,
@@ -21,36 +21,59 @@ function App() {
   const [gameOver, setGameOver] = useState(true)
 
   const startTrivial = async () => {
-    return
+    setLoading(true);
+    setGameOver(false);
+
+    const newQuestions = await fetchQuizQuestions(TOTAL_QUESTIONS, Difficulty.EASY);
+    setQuestions(newQuestions);
+    setScore(0)
+    setUserAnswers([])
+    setNumber(0);
+    setLoading(false)
+
+    console.log("QUESTIONS", questions)
+
   }
 
 
-  const checkAnswer: React.MouseEvent<HTMLButtonElement> = (e) => {
-    return
+  const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!gameOver) {
+      //Users answer
+      const answer = e.currentTarget.value;
+      //Check answer against correct answer
+      const correct = questions[number].correct_answer === answer
+      //Add score if answer is correct
+      if (correct) setScore(prev => prev + 1)
+      //Save answer in the array for user answers
+      const answerObject = {
+        question: questions[number].question,
+        answer,
+        correct,
+        correctAnswer: questions[number].correct_answer,
+      };
+      setUserAnswers((prev) => [...prev, answerObject])
+    }
   }
 
   const nextQuestion = () => {
-    return
+    //Move on to the next question if not the last question
+    const nextQuestion = number + 1;
+    if (nextQuestion === TOTAL_QUESTIONS) {
+      setGameOver(true)
+    } else {
+      setNumber(nextQuestion)
+    }
+
   }
-
-  // useEffect(() => {
-  //   const data = fetchQuizQuestions(10, Difficulty.EASY)
-  //   console.log("TEST:::", fetchQuizQuestions(10, Difficulty.EASY))
-  // }, [])
-
-  console.log("TEST:::", fetchQuizQuestions(TOTAL_QUESTIONS, Difficulty.EASY))
-
-
-  // console.log(startTrivial)
   return (
     <div className="App">
       <h1>REACT QUIZ</h1>
-      <button className="start" onClick={startTrivial}>
+      {gameOver || userAnwsers.length === TOTAL_QUESTIONS ? <button className="start" onClick={startTrivial}>
         Start
-      </button>
-      <p className="Score">Score :</p>
-      <p>Loading Questions ...</p>
-      {/* <QuestionsCard
+      </button> : null}
+      {!gameOver ? <p className="Score">Score : { score}</p> : null}
+      {loading && <p>Loading Questions ...</p>}
+      {!loading && !gameOver && <QuestionsCard
         questitonNr={number + 1}
         totalQuestions={TOTAL_QUESTIONS}
         questiton={questions[number].question}
@@ -58,10 +81,13 @@ function App() {
         userAnswers={userAnwsers ? userAnwsers[number] : undefined}
         callback={checkAnswer}
 
-      /> */}
-      <button className="next" onClick={nextQuestion}>
-        Next Question
-      </button>
+      />}
+
+      {!gameOver && !loading && userAnwsers.length === number + 1 && number !== TOTAL_QUESTIONS - 1 ? (
+        <button className="next" onClick={nextQuestion}>
+          Next Question
+        </button>
+      ) : null}
     </div>
   )
 }
