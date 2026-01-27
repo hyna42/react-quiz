@@ -1,6 +1,9 @@
 import { useState } from "react"
 import { Difficulty, fetchQuizQuestions, type QuestionState } from "./API";
 import QuestionsCard from "./components/Questions/Questions"
+//Styes
+import { GlobalStyle,Wrapper } from "./App.styles";
+
 
 
 const TOTAL_QUESTIONS = 10;
@@ -66,29 +69,32 @@ function App() {
 
   }
   return (
-    <div className="App">
-      <h1>REACT QUIZ</h1>
-      {gameOver || userAnwsers.length === TOTAL_QUESTIONS ? <button className="start" onClick={startTrivial}>
-        Start
-      </button> : null}
-      {!gameOver ? <p className="Score">Score : { score}</p> : null}
-      {loading && <p>Loading Questions ...</p>}
-      {!loading && !gameOver && <QuestionsCard
-        questitonNr={number + 1}
-        totalQuestions={TOTAL_QUESTIONS}
-        questiton={questions[number].question}
-        answers={questions[number].answers}
-        userAnswers={userAnwsers ? userAnwsers[number] : undefined}
-        callback={checkAnswer}
+    <>
+      <GlobalStyle/>
+      <Wrapper className="App">
+        <h1>REACT QUIZ</h1>
+        {gameOver || userAnwsers.length === TOTAL_QUESTIONS ? <button className="start" onClick={startTrivial}>
+          Start
+        </button> : null}
+        {!gameOver ? <p className="Score">Score : {score}</p> : null}
+        {loading && <p>Loading Questions ...</p>}
+        {!loading && !gameOver && <QuestionsCard
+          questitonNr={number + 1}
+          totalQuestions={TOTAL_QUESTIONS}
+          questiton={questions[number].question}
+          answers={questions[number].answers}
+          userAnswers={userAnwsers ? userAnwsers[number] : undefined}
+          callback={checkAnswer}
 
-      />}
+        />}
 
-      {!gameOver && !loading && userAnwsers.length === number + 1 && number !== TOTAL_QUESTIONS - 1 ? (
-        <button className="next" onClick={nextQuestion}>
-          Next Question
-        </button>
-      ) : null}
-    </div>
+        {!gameOver && !loading && userAnwsers.length === number + 1 && number !== TOTAL_QUESTIONS - 1 ? (
+          <button className="next" onClick={nextQuestion}>
+            Next Question
+          </button>
+        ) : null}
+      </Wrapper>
+    </>
   )
 }
 
